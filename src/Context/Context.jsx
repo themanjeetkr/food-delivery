@@ -15,9 +15,23 @@ const StoreContextProvider = (props) => {
     }
   };
 
-  const removeFromCart = (itemId) => {
+const removeFromCart = async (itemId) => {
     setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] - 1 }));
+    if (token) {
+      const response= await axios.post(
+        url + "/api/cart/remove",
+        { itemId },
+        { headers: { token } }
+      );
+      if(response.data.success){
+        toast.success("item Removed from Cart")
+      }else{
+        toast.error("Something went wrong")
+      }
+    }
   };
+
+
    useEffect(() => {
   console.log("Updated cart:", cartItems);
 }, [cartItems]);
